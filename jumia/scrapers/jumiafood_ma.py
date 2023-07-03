@@ -1,9 +1,6 @@
 import json
-import pandas as pd
-from time import sleep
 import var.constants as const
 import undetected_chromedriver as uc
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 class JumiaFoodMa(uc.Chrome):
@@ -11,12 +8,10 @@ class JumiaFoodMa(uc.Chrome):
     def __init__(self, teardown=False):
 
         self.teardown = teardown
-        # options = uc.ChromeOptions()
-        # options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        # options.add_argument("--headless")
-        super(JumiaFoodMa, self).__init__(use_subprocess=True)
+        options = uc.ChromeOptions()
+        options.add_argument("--headless")
+        super(JumiaFoodMa, self).__init__(options=options)
         self.implicitly_wait(15)
-        # self.maximize_window()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
 

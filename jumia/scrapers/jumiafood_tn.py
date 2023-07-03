@@ -1,20 +1,17 @@
 import json
-import pandas as pd
 import var.constants as const
-from selenium import webdriver
+import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 
-class JumiaFoodTn(webdriver.Chrome):
+class JumiaFoodTn(uc.Chrome):
 
     def __init__(self, teardown=False):
 
         self.teardown = teardown
-        options = webdriver.ChromeOptions()
-        options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        # options.add_argument("--headless")
+        options = uc.ChromeOptions()
+        options.add_argument("--headless")
         super(JumiaFoodTn, self).__init__(options=options)
         self.implicitly_wait(15)
-        # self.maximize_window()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
 
@@ -50,9 +47,19 @@ class JumiaFoodTn(webdriver.Chrome):
                          })
         return data
     
+    def close_popup(self):
+        try:
+            popup = self.find_element(
+                by=By.XPATH, 
+                value='//*[@id="jf"]/main/main/div[2]/div/header/div/button'
+                )
+            popup.click()
+        except:
+            pass
+    
     def get_restaurant(self, row, data):
 
-        self.get(row['restaurantUrl'])
+        self.get(row['restaurantUrl'][0])
 
         details = json.loads(self.find_element(By.XPATH, value='//*[@id="jf"]/main/script[1]').get_attribute('innerHTML').strip())
         item = {'name' : [details['name']],
